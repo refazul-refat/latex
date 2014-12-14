@@ -1,0 +1,20 @@
+del *.dvi
+del *.log
+del *.out
+del *.spl
+del *.aux
+del *.blg
+del *.bbl
+latex elsarticle-template
+bibtex elsarticle-template
+latex elsarticle-template
+latex elsarticle-template
+pdflatex elsarticle-template
+start "" /max "elsarticle-template.pdf"
+del *.dvi
+del *.log
+del *.out
+del *.spl
+del *.aux
+del *.blg
+del *.bbl
