@@ -274,7 +274,7 @@ Because we know $x_0^{(0)}$ from the plain text and the high nibble of $x_0^{(1)
 
 From the analysis in the previous sections, it is prominent that the existence of linear correlation between index Bytes of the state matrix and the location of corresponding accessed block in memory is the primary reason of vulnerability of AES in the first round. Given size of memory block (64 Bytes in most of the cases), any information about the memory access during the encryption process would directly reveal high nibble of the index Bytes. Thus if the size of the key is 128 Bit, pre-knowledge of the high nibbles of the index Bytes would reduce the brute force complexity to $2^{64}$. A machine that can perform 1 quadrillion operations per seconds would take less than 5 seconds to break the rest of the key in brute force attempt.\\
 
-If the correlation can be broken, so that the index Byte will no longer be used directly to locate the desired block of the Lookup table, most of the cache-timing threats will be eliminated. The key concept to the solution is to perform memory access to get the desired content but from an arbitrary, unpredictable location. This can be accomplished by introducing a Translator table between the state matrix and the lookup table. The index Bytes of the state matrix will then be used as index to the Translator table to get the location of the desired block.
+If the correlation can be broken, so that the index Byte will no longer be used directly to locate the desired block of the Lookup table, most of the cache-timing threats will be eliminated. The key concept to the solution is to perform memory access to get the desired content from an arbitrary, unpredictable location. This can be accomplished by introducing a Translator table between the state matrix and the Lookup table.
 
 \begin{center}
 \includegraphics[scale=0.4,natwidth=785,natheight=666]{Figures/rat-init(new).png}
@@ -475,119 +475,6 @@ The most challenging part of security is now making the implementation of the ex
 
 \section*{References}
 
-%\bibliography{mybibfile}
-\begin{thebibliography}{10}
-\expandafter\ifx\csname url\endcsname\relax
-  \def\url#1{\texttt{#1}}\fi
-\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
-\expandafter\ifx\csname href\endcsname\relax
-  \def\href#1#2{#2} \def\path#1{#1}\fi
-
-\bibitem{mars1998proposal}
-C.~Burwick, D.~Coppersmith, E.~D’Avignon, R.~Gennaro, S.~Halevi, C.~Jutla,
-  S.~M. Matyas~Jr, L.~O’Connor, M.~Peyravian, D.~Safford, et~al., Mars-a
-  candidate cipher for aes, NIST AES Proposal 268.
-
-\bibitem{rijndael1998proposal}
-J.~Daemen, V.~Rijmen, Aes proposal: Rijndael, NIST AES Proposal.
-
-\bibitem{serpent1998proposal}
-R.~Anderson, E.~Biham, L.~Knudsen, Serpent: A proposal for the advanced
-  encryption standard, NIST AES Proposal 174.
-
-\bibitem{twofish1998proposal}
-B.~Schneier, J.~Kelsey, D.~Whiting, D.~Wagner, C.~Hall, N.~Ferguson, Twofish: A
-  128-bit block cipher, NIST AES Proposal 15.
-
-\bibitem{fips}
-N.~F. Pub, 197: Advanced encryption standard (aes), Federal Information
-  Processing Standards Publication 197 (2001) 441--0311.
-
-\bibitem{admire}
-B.~Schneier, {Schneier on Security: Crypto-Gram},
-  \url{https://www.schneier.com/crypto-gram-0010.html}, [Online; accessed
-  19-June-2014] (2000).
-
-\bibitem{spadavecchia2006network}
-L.~Spadavecchia, A network-based asynchronous architecture for cryptographic
-  devices (2006).
-
-\bibitem{boneh}
-R.~D. D.~Boneh, R.~Lipton, {On the Importance of Checking Cryptographic
-  Protocols for Faults}, The Proceedings of the International Conference on the
-  Theory and Application of Cryptographic Techniques (EUROCRYPT'97) (1997)
-  37--51.
-
-\bibitem{kocher}
-P.~C. Kocher, Timing attacks on implementations of diffie-hellman, rsa, dss,
-  and other systems, in: Advances in Cryptology-CRYPTO'96, Springer, 1996, pp.
-  104--113.
-
-\bibitem{em}
-J.~R. Rao, P.~Rohatgi, Empowering side-channel attacks, IACR Cryptology ePrint
-  Archive 2001 (2001) 37.
-
-\bibitem{em2}
-K.~Gandolfi, C.~Mourtel, F.~Olivier, Electromagnetic analysis: Concrete
-  results, in: Cryptographic Hardware and Embedded Systems-CHES 2001, Springer,
-  2001, pp. 251--261.
-
-\bibitem{scards}
-J.-J. Quisquater, D.~Samyde, Electromagnetic analysis (ema): Measures and
-  counter-measures for smart cards, in: Smart Card Programming and Security,
-  Springer, 2001, pp. 200--210.
-
-\bibitem{daemen2002design}
-J.~Daemen, V.~Rijmen, The design of Rijndael: AES-the advanced encryption
-  standard, Springer, 2002.
-
-\bibitem{mit}
-R.~L. Rivest, A.~Shamir, L.~Adleman, A method for obtaining digital signatures
-  and public-key cryptosystems, Communications of the ACM 21~(2) (1978)
-  120--126.
-
-\bibitem{osvikold}
-D.~A. Osvik, A.~Shamir, E.~Tromer, Cache attacks and countermeasures: the case
-  of aes, in: Topics in Cryptology--CT-RSA 2006, Springer, 2006, pp. 1--20.
-
-\bibitem{osvik}
-E.~Tromer, D.~A. Osvik, A.~Shamir, Efficient cache attacks on aes, and
-  countermeasures, Journal of Cryptology 23~(1) (2010) 37--71.
-
-\bibitem{paladi}
-N.~Paladi, Trusted computing and secure virtualization in cloud computing,
-  Ph.D. thesis, Lule{\aa} University of Technology (2012).
-
-\bibitem{rudra2001efficient}
-A.~Rudra, P.~K. Dubey, C.~S. Jutla, V.~Kumar, J.~R. Rao, P.~Rohatgi, Efficient
-  rijndael encryption implementation with composite field arithmetic, in:
-  Cryptographic Hardware and Embedded Systems—CHES 2001, Springer, 2001, pp.
-  171--184.
-
-\bibitem{matsui2006far}
-M.~Matsui, How far can we go on the x64 processors?, in: Fast Software
-  Encryption, Springer, 2006, pp. 341--358.
-
-\bibitem{matsui2007power}
-M.~Matsui, J.~Nakajima, On the power of bitslice implementation on intel core2
-  processor, in: Cryptographic Hardware and Embedded Systems-CHES 2007,
-  Springer, 2007, pp. 121--134.
-
-\bibitem{konighofer2008fast}
-R.~K{\"o}nighofer, A fast and cache-timing resistant implementation of the aes,
-  in: Topics in Cryptology--CT-RSA 2008, Springer, 2008, pp. 187--202.
-
-\bibitem{meushaw2005device}
-R.~V. Meushaw, M.~S. Schneider, D.~N. Simard, G.~M. Wagner, Device for and
-  method of secure computing using virtual machines, uS Patent 6,922,774
-  (Jul.~26 2005).
-
-\bibitem{stallings5}
-W.~Stallings,
-  \href{http://books.google.com.bd/books?id=wwfTvrWEKVwC}{Cryptography and
-  Network Security: Principles and Practice}, 5th Edition, Prentice Hall, 2011.
-\newline\urlprefix\url{http://books.google.com.bd/books?id=wwfTvrWEKVwC}
-
-\end{thebibliography}
+\bibliography{mybibfile}
 
 \end{document}
