@@ -1,0 +1,5 @@
+\section{Related Works}
+
+In October 2005, Dag Arne Osvik, Adi Shamir and Eran Tromer presented a paper demonstrating several cache-timing attacks against AES \cite{osvikold}. One attack was able to obtain an entire AES key after only 800 operations triggering encryptions, in a total of 65 milliseconds. The attack required the attacker to be able to run programs on the same system or platform that is performing AES. That paper presented some decent defence against side-channel cache-timing attacks such as avoiding memory access, disabling cache sharing, dynamic table storage etc.\\
+
+They revised their paper on 2010 \cite{osvik} and focused on modern microprocessor implementations and presented few more preventions. Most of them lacked conceptual consolidation and provided as implicit implication. Some of them even requires alteration of cipher text that might cause significant overhead in distributed systems to maintain synchronization. Other works included introduction of asynchronous circuitry in AES implementation \cite{spadavecchia2006network}.\\
