@@ -1,38 +1,21 @@
 \section{Proposed Random Address Translator (RAT)}
 
-From the analysis in the previous sections, it is prominent that the existence of linear correlation between index Bytes of the state matrix and the location of corresponding accessed block in memory is the primary reason of vulnerability of AES in the first round. Given size of memory block (64 Bytes in most of the cases), any information about the memory access during the encryption process would directly reveal high nibble of the index Bytes. Thus if the size of the key is 128 Bit, pre-knowledge of the high nibbles of the index Bytes would reduce the brute force complexity to $2^{64}$. A machine that can perform 1 quadrillion operations per seconds would take less than 5 seconds to break the rest of the key in brute force attempt.\\
+From the analysis in the previous sections, it is prominent that the existence of linear correlation between index Bytes of the state matrix and the location of corresponding accessed block in memory is the primary reason of vulnerability of AES in the first round. Given size of memory block (64 Bytes in most of the cases), any information about the memory access during the encryption process would directly reveal high nibble of the index Bytes. Thus if the size of the key is 128 Bit, pre-knowledge of the high nibbles of the index Bytes would reduce the brute force complexity to $2^{64}$.\\
 
-If the correlation can be broken, so that the index Byte will no longer be used directly to locate the desired block of the Lookup table, most of the cache-timing threats will be eliminated. The key concept to the solution is to perform memory access to get the desired content from an arbitrary, unpredictable location. This can be accomplished by introducing a Translator table between the state matrix and the Lookup table.\\
+If the correlation can be broken, so that the index Bytes will no longer be used to directly locate the desired block of the Lookup table, most of the cache-timing threats will be eliminated. The key concept to the solution is to perform memory access to get the desired content from an arbitrary, unpredictable location. This can be accomplished by introducing a Translator table between the state matrix and the Lookup table.\\
 
-The most common picture that one might perceive in such a scenario is the introduction of a mapping table that maps a Byte to another Byte. But a flat mapping table will have several disadvantages: it will incur more cache misses than a normal table lookup encryption process that may account for disatrous performance concern. The big problem is that it can be large; at least 256 Bytes since the Lookup table itself has 256 entries. A good solution must seek for, if not reduced, at most the same number of cache misses that would occur in a normal Lookup table operation as well as consume least number of Bytes as part of the mapping table.\\
+The most common picture that one might perceive in such a scenario is the mediation of a mapping table that maps one Byte to another. But a flat mapping table would have several disadvantages. First of all, it will incur more cache misses than a normal table lookup encryption process. This may account for disatrous performance concern because cache misses are very expensive. Secondly, it can be large; at least 256 Bytes since the Lookup table itself has 256 entries. A good translator must consume least number of Bytes as part of its mapping operation as well as seek for at most the same number of cache misses that would occur in a normal table lookup operation.\\
 
-One reasonable way to ensure similar number of cache misses as the normal process would be to keep chunks of Bytes together and rearrange them. In our solution, we defined 1 chunk to contain 16 Bytes. So we have 16 chunks altogether and if the memory block (Cache Line) is at least 64 Bytes, it can be easily inferred that we are not incurring more cache misses than the normal process. At present, most processors have 64 Byte cache line.\\
+One reasonable way to ensure similar number of cache misses as the normal process would be to keep chunks of Bytes of the translator table together and then rearrange them. In our solution, we defined 1 chunk to contain 16 Bytes. So we have a total of 16 chunks and if the memory block (Cache Line) is at least 64 Bytes, it can be easily inferred that we are not incurring more cache misses than the normal process. At present, most processors have 64 Byte cache line.\\
 
-Next big concern is size. Mapping 256 Bytes requires another 256 Bytes, but mapping 256 Bytes with 16 Bytes grouped together requires only 16 Bytes. So we are talking about some kind of mapping of Bytes here that translates only the most significant 4 bits. Let f(x) be that function. Then f(0x2E) will return anything from the set {0x0E,0x1E,0x2E,...,0xFE}.
-
-\begin{center}
-\includegraphics[scale=0.4,natwidth=785,natheight=666]{Figures/rat-init(new).png}
-\captionof{figure}{Random Address Translator Initialization.}
-\label{fig: Random Address Translator Initialization.}
-\end{center}
-
-The Translator table is initially aligned with the Lookup table as illustrated in figure 7. This implies that if the address of $i$-th row in the lookup table is $X_i$, the content of the $i$-th row of the Translator table is also $X_i$. So initially it has no effect on the accessed memory block of the lookup table because it is fully aligned with it. After that, lets take two rows of the Translator table $T_i$ and $T_j$ and corresponding two rows of the original lookup table $L_i$ and $L_j$ and perform a swap between them. This is illustrated in figure 8.
+The next big concern is size. Mapping 256 Bytes requires another 256 Bytes, but mapping 256 Bytes with 16 Bytes grouped together requires only 16 Bytes. Let $f(x)$ be that mapping function. Then $f($0x2E$)$ can return anything from the set \{0x0E,0x1E,0x2E,...,0xFE\} but not something like 0x2F or 0xAB. That is, the low nibble will be unchanged.
 
 \begin{center}
-\includegraphics[scale=0.38,natwidth=785,natheight=666]{Figures/rat-step-1.png}
-\captionof{figure}{Random Address Translator after first swap.}
-\label{fig: Random Address Translator after first swap.}
+\includegraphics[scale=0.4,natwidth=640,natheight=530]{psd/after.png}
+\captionof{figure}{The figure illustrates the state of the mapping and inverse mapping tables after randomization. Since numbers from 0 to 15 requires only 4 bits and a Byte is capable of storing 8 bits, the tables can be condensed by a factor of two and can be conveniently stored as a set of four 32 bit integers $rat_i$ for $0<=i<=3$}
 \end{center}
 
-Continuing this way, there can be at most 128 swaps between the entries of the table. Note that an entry can be swapped only once, so keeping trace of swapped entries is important. After scrambling, the correlation is completely broken as illustrated in figure 9.
-
-\begin{center}
-\includegraphics[scale=0.38,natwidth=785,natheight=666]{Figures/rat-scrambled(new).png}
-\captionof{figure}{Random Address Translator completely scrambled. It can be noticed that some of the entries can be left ``unswapped'' as the process is arbitrary. Here 2nd entry is left intact.}
-\label{fig: Random Address Translator Scrambled.}
-\end{center}
-
-With the RAT activated, there is no such phrase such as, index 0x05 will access the 1st block of the Lookup table. Because the content of the address 0x05 is now at 0x7B address (from the figure above) and that tracing is recorded by the RAT. The procedure for constructing the RAT is formulated in algorithm 2 and 3.
+The following algorithm outlines the process. It takes no parameters and returns a set of four integers. The first two integers $rat_0$ and $rat_1$ will be used randomize the Lookup table and the last two integers $rat_2$ and $rat_3$ will be used to retrieve correct piece of information from the Lookup table.
 
 \begin{algorithm}
 	\caption{Constructing the RAT}
@@ -64,7 +47,7 @@ With the RAT activated, there is no such phrase such as, index 0x05 will access 
 	\end{algorithmic}
 \end{algorithm}
 
-After that, a scrambling is done on both tables simultaneously and arbitrarily. Note that no entry is allowed to be scrambled or swapped with other entry more than once. Also note the presence of \emph{rand()} methods. It symbolizes the randomness of the swapping process.
+Now that we have the mapping integers ready, we can proceed to randomize the Lookup table. But for that we need to operate on the integers ($rat_1$ and $rat_2$). The following algorithm does that operation. It takes an offset Byte as argument and returns another offset Byte.
 
 \begin{algorithm}
 	\caption{Mapping Fuction}
@@ -84,6 +67,8 @@ After that, a scrambling is done on both tables simultaneously and arbitrarily. 
 
 	\end{algorithmic}
 \end{algorithm}
+
+To further illustrate what this mapping function does, let us assume that  $map($0x3E$)$ returns 0x9E. This implies that the content of Lookup table at offset 0x9E is now at offset 0x3E. The following $mingle()$ function does the randomization. It takes the original Lookup table as argument and returns the confounded Lookup table. A temporary table is created to make the process really fast. After the randomization is done, that temporary table is completely removed from memory.
 
 \begin{algorithm}
 	\caption{Mingling Function}
@@ -108,6 +93,8 @@ After that, a scrambling is done on both tables simultaneously and arbitrarily. 
 
 	\end{algorithmic}
 \end{algorithm}
+
+Now that we have a perplexed Lookup table, encryption can not still be done because the pieces are not in their right place. Here the last two integers $rat_2$ and $rat_3$ comes into action. Their job is to get the correct piece of information from the mixed up Lookup table. For that we need an inverse mapping function. For example, if $map($0x3E$)$ returns 0x9E, $inverseMap($0x9E$)$ would return 0x3E.
 
 \begin{algorithm}
 	\caption{Inverse Mapping Fuction}
