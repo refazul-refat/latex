@@ -70,21 +70,21 @@
 %\address[mymainaddress]{Computer Science and Engineering Department, University of Dhaka}
 %\address[mysecondaryaddress]{360 Park Avenue South, New York}
 
+\author[label1]{Md. Mosaddek Khan}\ead{mosaddek@cse.univdhaka.edu}
+\author[label1]{Md. Refazul Islam Refat}\ead{refazul.refat@gmail.com}
+\author[label1]{Euna Islam}\ead{euna.islam@gmail.com}
+\author[label1]{Dr. Md. Mamum-or-Rashid}\ead{mamun@cse.univdhaka.edu}
 
-\author[label1]{Refazul Islam Refat}\ead{refazul.refat@gmail.com}
- \author[label1]{Euna Islam}\ead{euna.islam@gmail.com}
- \author[label1]{Md. Mosaddek Khan\corref{*}}\ead{mosaddek@cse.univdhaka.edu}
 
-
- \address[label1]{Department of Computer Science and Engineering, University of Dhaka, Bangladesh}
+\address[label1]{Department of Computer Science and Engineering, University of Dhaka, Bangladesh}
 % \address[label4]{Faculty of Engineering and Information Technology, University of Technology Sydney}
  %\address[label4]{Department of Computer Engineering, Kyung Hee University, South Korea}
   %\address[label5]{School of Computing and Mathematics, Charles Sturt University, Australia}
 
-\cortext[*]{Corresponding Author. Mob.: 011900}
+%\cortext[*]{Corresponding Author. Mob.: 011900}
 
 \begin{abstract}
-In the era of virtualization, co-residency with unknown neighbours is a necessary evil and leakage of information through side-channels is an inevitable fact. Preventing this leakage of information through side-channels, yet maintaining high efficiency, has become one of the most challenging parts of any implementation of the Advanced Encryption Standard (AES) that is based on the Rijndael Cipher. Exploiting the associative nature of the cache and susceptible memory access pattern, AES is proved to be vulnerable to side-channel cache-timing attacks. The reason of this vulnerability is primarily ascribed to  the existence of correlation between the index Bytes of the State matrix and corresponding accessed memory blocks. In this paper, we idealized the model of cache-timing attack and proposed a way of breaking this correlation through the implementation of a Random Address Translator (RAT). The simplicity of the design architecture of RAT can make itself a wonderful choice as a way of indexing the lookup tables for the implementers of the AES seeking resistance against side-channel cache-timing attacks.
+In the era of virtualization, co-residency with unknown neighbours is a necessary evil and leakage of information through side-channels is an inevitable fact. Preventing this leakage of information through side-channels, yet maintaining high efficiency, has become one of the most challenging parts of any implementation of the Advanced Encryption Standard (AES) based on the Rijndael Cipher. Exploiting the associative nature of the cache and susceptible memory access pattern, AES is proved to be vulnerable to side-channel cache-timing attacks. The reason of this vulnerability is primarily ascribed to the existence of correlation between the Bytes of the state matrix and corresponding accessed memory blocks. In this paper, we idealized the model of cache-timing attack and proposed a way of breaking this correlation through the implementation of a Random Address Translator (RAT). The simplicity of the design architecture of RAT can make itself a wonderful choice as a way of indexing the lookup tables for the implementers of the AES seeking resistance against side-channel cache-timing attacks.
 \end{abstract}
 
 \begin{keyword}
@@ -102,7 +102,7 @@ AES\sep Cache-Timing Attack\sep Security
 \input{rat.tex}				% Proposed Random Address Translator (RAT)
 \input{performance.tex}		% Performance Evaluation
 \input{future.tex}			% Future Works
-\input{conclusion.tex}		% Conclusion
+
 
 \clearpage
 
