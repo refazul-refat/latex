@@ -21,13 +21,13 @@ The Prime+Probe technique has the following 3 phases:
 During the Prime phase, the cache is filled completely by the attacking process. This can be done by allocating a contiguous amount of memory as big as the size of the cache and performing a read on it.
 
 \paragraph{Trigger}
-With the cache filled with attacker's data, he will trigger an encryption for some known plain text. As the encrypting process reaches the first round and performs table lookup, it is interrupted. An important point to note here is, the model is being idealized to illustrate the susceptibility of the first round. Recovering the AES Encryption Key is not the intent of this paper.
+With the cache filled with data of the attacking process, it will trigger an encryption for some known plain text. As the encrypting process reaches the first round and performs table lookup, it is interrupted. An important point to note here is, the model is idealized here to illustrate the susceptibility of the first round. Recovering the AES Encryption Key is not the intent of this paper.
 
 \paragraph{Probe}
-After the encrypting process is interrupted just after it performs its table lookup during the first round, the Prime step is done again, i.e. the cache is filled again. But this time, a clock is maintained to determine a cache miss. Before the Trigger phase, the cache was completely filled by attacker's data. But after that Trigger phase, one block of the 
+After the encrypting process is interrupted just after it performed a table lookup during the first round, the Prime step is done again, i.e. the cache is filled again. But this time, a clock is maintained to determine a cache miss. Before the Trigger phase, the cache was completely filled by attacker's data. But after that Trigger phase, one block of the 
 Lookup table $T_i$ is now in the cache due to lookup operation. So all but that block will suffer a cache miss.
 
-Observing the position of the cache miss, attacker can easily identify which block of $T_i$ was accessed since it was assumed that Lookup Tables $T_i$ are congruent with the cache. Since size of \emph{memory block} is 64 Bytes in most cases, each \emph{memory block} holds 16 entry of the Lookup Table. So for example, if 7th block of $T_0$ was accessed, one can conclude the index $x_0^{(1)}$ was somewhat between 0x60 and 0x6F, i.e. the high nibble is 0x6. We know
+Observing the position of the cache miss, the attacking process can identify which block of $T_i$ was accessed since it was assumed that Lookup Tables $T_i$ are congruent with the cache. Since size of \emph{memory block} is 64 Bytes in most cases, each \emph{memory block} holds 16 entry of the Lookup Table. So for example, if 7th block of $T_0$ was accessed, one can conclude the index $x_0^{(1)}$ was somewhat between 0x60 and 0x6F, i.e. the high nibble is 0x6. We know
 
 \begin{align*}
 x_0^{(1)}=x_0^{(0)} \oplus k_0^{(0)}

@@ -4,7 +4,7 @@ Before understanding the weakest part of the cipher, a clarified concept of cach
 
 The memory access patterns of AES are particularly susceptible to cryptanalysis. The cipher is abstractly defined by algebraic operations and could, in principle, be directly implemented using just logical and arithmetic operations. However, performance-oriented software implementations on 32-bit (or higher) processors typically use an alternative formulation based on lookup tables as prescribed in the Rijndael Specification \citep{daemen2002design}.\\
 
-Several lookup tables are precomputed once by the programmer or during system initialization. There are 8 such tables, $T_0,T_1,T_2,T_3$ and $T_0^{10},T_1^{10},T_2^{10},T_3^{10}$, each containing 256 4-byte words. The contents of the tables, defined in \citep{daemen2002design}, are inconsequential to most of the cache-timing attacks because of memory protection.\\
+Several lookup tables are precomputed once by the programmer or during system initialization. There are 8 such tables, $T_0,T_1,T_2,T_3$ and $T_0^{10},T_1^{10},T_2^{10},T_3^{10}$, each containing 256 four-byte words. The contents of the tables, defined in \citep{daemen2002design}, are inconsequential to most of the cache-timing attacks because of memory protection.\\
 
 During key setup, a given 16-byte secret key $k=(k_0,k_1,...,k_{15})$ is expanded into 10 round keys, $K^{(r)}$ for $r=1,2,...,10$. Each round is divided into 4 words of 4 bytes each: $K^{(r)}=(K_0^{(r)},K_1^{(r)},K_2^{(r)},K_3^{(r)})$. The 0th round key is just the raw key: $K_j^{(0)}=(k_{4j},k_{4j+1},k_{4j+2},k_{4j+3})$ for $j=0,1,2,3$. The details of the rest of the key expansions are mostly inconsequential \citep{osvik}.\\
 
