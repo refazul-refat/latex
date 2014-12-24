@@ -17,4 +17,3 @@ del *.out
 del *.spl
 del *.aux
 del *.blg
-del *.bbl
